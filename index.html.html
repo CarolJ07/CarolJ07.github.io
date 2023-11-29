@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECG Signal Simulation System</title>
+    <style>
+        body {
+            background-color: #dee5e9;
+            font-family: 'Comic Sans MS', sans-serif;
+            color: #120202;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            color: #0f0202;
+        }
+
+        /* Estilos para organizar los botones en filas */
+        .button-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .button-row button {
+            width: 18%;
+            padding: 10px;
+            background-color: #d9534f; /* Rojo */
+            color: #ffffff; /* Blanco */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+           
+        }
+
+        .button-row button:hover {
+            background-color: #c9302c; /* Rojo más oscuro al pasar el ratón */
+        }
+
+        /* Estilos para el contenedor principal */
+        .condition-container {
+            display: flex;
+            flex-wrap: wrap; /* Permite que los elementos se envuelvan a la siguiente línea si no hay suficiente espacio */
+            margin-top: 20px;
+            gap: 20px; /* Agregado para agregar espacio entre elementos */
+        }
+
+        /* Estilos para el contenedor del video y concepto */
+        .condition-content-container {
+            background-color: #e4e7e9;
+            padding: 15px;
+            width: 100%;
+            box-sizing: border-box;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between; /* Alinea los elementos a los extremos */
+        }
+
+        /* Estilos para el contenedor del video */
+        .condition-video-container {
+            width: 48%; /* Ajusta el ancho según sea necesario */
+            text-align: center;
+        }
+
+        .condition-video-container video {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 5px;
+        }
+
+        /* Estilos para el contenedor del concepto */
+        .condition-concept-container {
+            width: 48%; /* Ajusta el ancho según sea necesario */
+            padding: 10px;
+            background-color: #fafafabf;
+            border-radius: 7px;
+        }
+
+        /* Nuevos estilos para reducir el espacio entre los contenedores */
+        .condition-container .condition-content-container {
+            margin-bottom: 0;
+        }
+
+        
+        
+    </style
+    </style>
+    <script>
+        function showCondition(condition) {
+            const conditionContent = document.getElementById("condition-content");
+            conditionContent.innerHTML = `
+                <h1>${condition.name}</h1>
+                <div class="condition-container">
+                    <div class="condition-video-container">
+                        <video width="400" height="300" controls autoplay>
+                            <source src="${condition.video}" type="video/mp4">
+                            Tu navegador no soporta el tag de video.
+                        </video>
+                    </div>
+                    <div class="condition-concept-container">
+                        <p id="concept-text"></p>
+                    </div>
+                </div>
+            `;
+
+            // Obtén el párrafo del concepto
+            const conceptParagraph = document.getElementById("concept-text");
+
+            // Divide el concepto en caracteres
+            const characters = condition.concept.split('');
+
+            // Inicializa un índice
+            let index = 0;
+
+            // Ajusta la velocidad aquí (50 milisegundos)
+            const intervalDuration = 50;
+
+            // Muestra cada letra con el intervalo especificado
+            const intervalId = setInterval(() => {
+                conceptParagraph.innerHTML += characters[index];
+                index++;
+
+                // Si todas las letras han sido mostradas, detén el intervalo
+                if (index === characters.length) {
+                    clearInterval(intervalId);
+                }
+            }, intervalDuration);
+        }
+        const conditions = [
+            {
+                name: "Regular Sinus Rhythm",
+                video: "Normal Sinus Rhythm - NSR - ECG Simulator - Arrhythmia Simulator.mp4",
+                concept: "Normal sinus rhythm (NSR) refers to the normal electrical activity of the heart originating from the sinus node. It is characterized by a regular heart rate, normal P wave morphology, and a consistent PR interval. NSR is considered the normal rhythm of a healthy heart "
+            },
+            {
+                name: "Sinus Rhythm with Baseline Wander",
+                video: "Sinus Rhythm with Baseline Wander.mp4",
+                concept: "Sinus rhythm with baseline wander refers to a normal sinus rhythm on an electrocardiogram (ECG) that is accompanied by a fluctuating baseline. Baseline wander can be caused by various factors, such as patient movement or poor electrode contact, and can make it difficult to accurately interpret the ECG waveform."
+            },
+            {
+                name: "Sinus Arrhythmia-HVR",
+                video: "Sinus Arrhythmia - HRV.mp4",
+                concept: "Sinus arrhythmia refers to a variation in the heart rate during normal sinus rhythm. It is characterized by a slight variation in the R-R intervals, with the heart rate increasing during inspiration and decreasing during expiration. Sinus arrhythmia is commonly observed in young individuals and is considered a normal physiological response "
+            },
+            {
+                name: "Sinus Tachycardia",
+                video: "Sinus Tachycardia.mp4",
+                concept: "Sinus tachycardia is a condition characterized by a rapid heart rate that originates from the sinus node. It is a normal physiological response to various factors such as exercise, stress, pain, or fever. Sinus tachycardia is characterized by a regular rhythm with a heart rate exceeding 100 beats per minute in adults. On an ECG, sinus tachycardia appears as a normal sinus rhythm with an increased heart rate."
+            },
+            {
+                name: "Sinus exit block",
+                video: "Sinus Exit Block - ECG Simulator - Arrhythmia Simulator.mp4",
+                concept: "Sinus exit block, also known as sinus arrest, is a condition characterized by a temporary pause or absence of sinus node activity. The sinus node, which is responsible for initiating the electrical impulses that regulate the heart rhythm, fails to generate a normal impulse. This results in a pause in the normal heart rhythm, which can be seen on an ECG as a missing P wave and a prolonged R-R interval."
+            },
+            {
+                name: "Sinus Arrest",
+                video: "Sinus Arrest - ECG Simulator - Arrhythmia Simulator.mp4",
+                concept: "Sinus arrest, also known as sinus pause, is a condition characterized by the temporary cessation of sinus node activity. The sinus node, which is responsible for initiating the electrical impulses that regulate the heart rhythm, stops generating impulses for a period of time. This results in a pause in the normal heart rhythm, which can be seen on an ECG as a missing P wave and a prolonged R-R interval."
+            },
+            {
+                name: "Premature Atrial Contractions (PACS)",
+                video: "Premature Atrial Contractions (PACs) - ECG Simulator - Arrhythmia Simulator.mp4",
+                concept: "Premature atrial contractions (PACs) are premature heartbeats that originate from the atria. They occur earlier than expected in the cardiac cycle and can be seen on an ECG as a premature P wave followed by a normal QRS complex. PACs are usually benign and may be caused by various factors such as stress, caffeine, or alcohol."
+            },
+            {
+                name: "Ventricular Trigeminy",
+                video: "Ventricular Trigeminy - ECG SImulator - Arrhythmia Simulator.mp4",
+                concept: "Ventricular trigeminy is an arrhythmia characterized by a regular rhythm with every third beat being a premature ventricular complex (PVC) In other words, there are two normal beats followed by a PVC. The R-R intervals between the normal beats are regular, but the PVC interrupts the regularity. This pattern can be seen on an electrocardiogram (ECG) where the PVC appears as a wide QRS complex that is premature compared to the normal QRS complexes."
+            },
+            {
+                name: "Ventricular Fibrillation",
+                video: "Ventricular Fibrillation - VFIB - ECG Simulator - Arrhythmia Simulator.mp4",
+                concept: "Ventricular fibrillation is a life-threatening arrhythmia characterized by chaotic and irregular electrical activity in the ventricles of the heart. Instead of coordinated contractions, the ventricles quiver or fibrillate, resulting in the inability of the heart to effectively pump blood. Ventricular fibrillation is a medical emergency that requires immediate intervention, such as defibrillation, to restore a normal heart rhythm and prevent cardiac arrest."
+            },
+            {
+                name: "Supraventricular Tachycardia ",
+                video: "Supraventricular Tachycardia - SVT - ECG Simulator - Arrhythmia Simulator.mp4",
+                concept: "Supraventricular tachycardia (SVT) is a broad term that encompasses various rapid heart rhythms originating from above the ventricles. It typically involves the atria or the atrioventricular (AV) node. SVT is characterized by a regular and fast heart rate, usually exceeding 150 beats per minute. It can cause symptoms such as palpitations, shortness of breath, and dizziness. Treatment options for SVT include medications, vagal maneuvers, and in some cases, catheter ablation."
+            },
+            {
+                name: "Ventricular Bigeminy ",
+                video: "Ventricular Bigeminy.mp4",
+                concept: "Ventricular bigeminy is an arrhythmia characterized by a regular rhythm with every other beat being a premature ventricular complex (PVC) . In other words, there is one normal beat followed by a PVC, and this pattern repeats. The R-R intervals between the normal beats are regular, but the PVC interrupts the regularity. On an ECG, the PVC appears as a wide QRS complex that is premature compared to the normal QRS complexes."
+            },
+            {
+                name: "Idioventricular Rhythm ",
+                video: "Idioventricular Rhythm - ECG Simulator - Arrhythmia Simulator.mp4",
+                concept: "Idioventricular rhythm is a slow regular ventricular rhythm that occurs when the normal pacemakers of the heart fail to initiate electrical impulses. It typically has a rate of less than 50 beats per minute. Idioventricular rhythm is characterized by the absence of P waves and a prolonged QRS complex on an electrocardiogram (ECG)."
+            },
+            {
+                name: "Accelerated Idioventricular Rhythm ",
+                video: "Accelerated Idioventricular Rhythm - ECG Simulator - Arrhythmia Simulator.mp4",
+                concept: "Accelerated idioventricular rhythm is a regular ventricular rhythm that occurs at a faster rate than idioventricular rhythm. It typically has a rate between 50 and 100 beats per minute. On an electrocardiogram (ECG), accelerated idioventricular rhythm appears as a slow regular rhythm with absent P waves and a prolonged QRS complex."
+            },
+            {
+                name: "1st Degree AV Block ",
+                video: "First Degree AV Block - ECG Simulator - Arrhythmia Simulator.mp4",
+                concept: "First-degree atrioventricular (AV) block is a condition in which there is a delay in the conduction of electrical impulses between the atria and ventricles. On an electrocardiogram (ECG), first-degree AV block is characterized by a prolonged PR interval, which represents the delay in conduction."
+            },
+            {
+                name: "2nd Degree Type I AV Block ",
+                video: "Second Degree Type I AV Block - ECG Simulator - Arrhythmia Simulator.mp4",
+                concept: "Second-degree type I atrioventricular (AV) block, also known as Wenckebach block, is a conduction abnormality in the heart's electrical system. It is characterized by a progressive lengthening of the PR interval until a beat is dropped (blocked). This pattern repeats, with each cycle of lengthening PR intervals until a dropped beat occurs. On an ECG, it is characterized by a progressive prolongation of the PR interval until a dropped beat is observed ."
+            },
+            {
+                name: "2nd Degree Type II AV Block ",
+                video: "Second Degree  Type II AV Block - ECG Simulator - Arrhythmia Simulator.mp4",
+                concept: "Second-degree type II atrioventricular (AV) block, also known as Mobitz type II AV block, is a condition in which some of the electrical signals from the atria fail to reach the ventricles. This results in intermittent blockage of the electrical conduction between the atria and ventricles. On an electrocardiogram (ECG), second-degree type II AV block is characterized by dropped QRS complexes without a progressive prolongation of the PR interval ."
+            },
+            {
+                name: "2nd Degree 2:1 AV Block ",
+                video: "Second Degree 2_1 AV Block - ECG Simulator - Arrhythmia Simulator.mp4",
+                concept: "Second-degree 2:1 atrioventricular (AV) block is a condition in which every other atrial impulse is blocked from reaching the ventricles. This results in a 2:1 ratio of conducted to blocked atrial impulses. On an electrocardiogram (ECG), second-degree 2:1 AV block appears as a regular pattern of conducted P waves followed by blocked P waves, resulting in a 2:1 relationship between P waves and QRS complexes "
+            },
+            {
+                name: "3rd Degree AV Block ",
+                video: "Third Degree AV Block - ECG Simulator - Arrhythmia Simulator.mp4",
+                concept: "Third-degree atrioventricular (AV) block, also known as complete heart block, is a condition in which there is a complete blockage of electrical conduction between the atria and ventricles. In this condition, the atria and ventricles beat independently of each other. On an electrocardiogram (ECG), third-degree AV block appears as a complete dissociation between P waves and QRS complexes, with no relationship between them."
+            },
+            {
+                name: "Accelerated Nodal Rhythm",
+                video: "Accelerated Nodal Rhythm - ECG Simulator - Arrhythmia Simulator.mp4",
+                concept: "Accelerated nodal rhythm is a regular ventricular rhythm that originates from the atrioventricular (AV) node and has a faster heart rate than normal sinus rhythm. The rate of accelerated nodal rhythm is typically between 60 and 100 beats per minute. It is characterized by the absence of P waves and a normal QRS complex on an electrocardiogram (ECG) "
+            },
+            {
+                name: "Premature Nodal (Junctional) Contractions",
+                video: "Premature Nodal (Junctional) Contractions - ECG Simulator - Arrhythmia Simulator.mp4",
+                concept: "Premature nodal (junctional) contractions, also known as junctional premature beats, are premature heartbeats that originate from the atrioventricular (AV) node or the surrounding tissues. These beats occur earlier than expected in the cardiac cycle and can be seen on an ECG as a premature P wave, a narrow QRS complex, and a compensatory pause before the next normal beat"
+            },
+            {
+                name: "Nodal Escape Rhythm ",
+                video: "Nodal Escape Rhythm - ECG Simulator - Arrhythmia Simulator.mp4",
+                concept: "Nodal escape rhythm is a slow regular ventricular rhythm that occurs when the normal pacemaker of the heart, the sinoatrial (SA) node, fails to initiate an electrical impulse. In this rhythm, the atrioventricular (AV) node takes over as the pacemaker, resulting in a slower heart rate. The rate of nodal escape rhythm is typically less than 60 beats per minute. It is characterized by the absence of P waves and a prolonged QRS complex on an electrocardiogram (ECG) "
+            },
+            {
+                name: "Nodal Bigeminy",
+                video: "Nodal Bigeminy - ECG Simulator - Arrhythmia Simulator.mp4",
+                concept: "Nodal bigeminy is an irregular ventricular rhythm in which every other beat is a premature ventricular contraction (PVC) originating from the atrioventricular (AV) node. This results in a pattern where a normal beat is followed by a PVC, creating a couplet pattern. On an electrocardiogram (ECG), nodal bigeminy appears as alternating normal QRS complexes and PVCs."
+            },
+            {
+                name: "Nodal Tachycardia",
+                video: "Nodal Tachycardia - ECG Simulator - Arrhythmia Simulator.mp4",
+                concept: "Nodal tachycardia is a regular ventricular rhythm that originates from the atrioventricular (AV) node and has a fast heart rate. The rate of nodal tachycardia is typically between 100 and 150 beats per minute. It is characterized by the absence of P waves and a normal QRS complex on an electrocardiogram (ECG)."
+            },
+            {
+                name: "Atrial Trigeminy",
+                video: "Atrial Trigeminy - ECG Simulator - Arrhythmia Simulator.mp4",
+                concept: "Atrial trigeminy is an irregular atrial rhythm in which every third beat is a premature atrial contraction (PAC). This results in a pattern where two normal beats are followed by a PAC, creating a triplet pattern. On an electrocardiogram (ECG), atrial trigeminy appears as alternating normal P waves and PACs."
+            },
+            {
+                name: "Atrial Fibrillation ",
+                video: "Atrial Fibrillation - AFIB - ECG Simulator - Arrhythmia Simulator.mp4",
+                concept: "Atrial fibrillation is an irregular atrial rhythm characterized by rapid and chaotic electrical activity in the atria. Instead of a coordinated contraction, the atria quiver or fibrillate, leading to an irregular ventricular response. On an electrocardiogram (ECG), atrial fibrillation appears as irregularly irregular R-R intervals and the absence of distinct P waves."
+            },
+            {
+                name: "Atrial Flutter 3:1 ",
+                video: "Atrial Flutter 3_1 - ECG Simulator - Arrhythmia Simulator.mp4",
+                concept: "Atrial flutter is a regular atrial rhythm characterized by rapid atrial contractions. In atrial flutter 3:1, for every three atrial contractions, only one is conducted to the ventricles. On an electrocardiogram (ECG), atrial flutter 3:1 appears as a regular pattern of flutter waves (sawtooth-shaped waves) and a fixed 3:1 relationship between atrial contractions and ventricular contractions."
+            },
+            {
+                name: "ST Segment Depression ",
+                video: "ST Segment Depression - ECG Simulator - Arrhythmia Simulator.mp4",
+                concept: "ST segment depression refers to a downward shift or depression of the ST segment on an ECG. The ST segment represents the period between ventricular depolarization and repolarization. ST segment depression can be indicative of myocardial ischemia, which is a lack of blood flow to the heart muscle. It can be seen in conditions such as coronary artery disease, angina, and myocardial infarction (heart attack) "
+            },
+            {
+                name: "ST Segment Elevation",
+                video: "ST Segment Elevation - ECG Simulator - Arrhythmia Simulator.mp4",
+                concept: "ST segment elevation refers to an upward shift or elevation of the ST segment on an ECG. ST segment elevation is a characteristic finding in acute myocardial infarction (heart attack). It indicates that there is ongoing damage to the heart muscle due to a blockage in one of the coronary arteries. Prompt medical intervention is necessary to restore blood flow and prevent further damage to the heart."
+            },
+            {
+                name: "Left Bundle Branch Block",
+                video: "Left Bundle Branch Block - ECG Simulator - Arrhythmia Simulator.mp4",
+                concept: "Left bundle branch block (LBBB) is a conduction abnormality in the heart's electrical system. It occurs when there is a delay or blockage in the electrical signals traveling through the left bundle branch, which is responsible for conducting impulses to the left ventricle. LBBB can be seen on an ECG as a widened QRS complex and specific changes in the ST segment and T wave "
+            },
+            {
+                name: "Right Bundle Branch Block",
+                video: "Right Bundle Branch Block - ECG Simulator - Arrhythmia Simulator.mp4",
+                concept: "Right bundle branch block (RBBB) is a conduction abnormality in the heart's electrical system. It occurs when there is a delay or blockage in the electrical signals traveling through the right bundle branch, which is responsible for conducting impulses to the right ventricle. RBBB can be seen on an ECG as a widened QRS complex and specific changes in the ST segment and T wave ."
+            },
+            
+            // Agrega información similar para las otras condiciones
+        ];
+
+        {
+
+        }   
+    </script>
+</head>
+    </script>
+</head>
+<body>
+    <h2>LEARNING</h2>
+
+    <!-- Dividir los botones en filas -->
+    <div class="button-row">
+        <button onclick="showCondition(conditions[0])">Regular Sinus Rhythm</button>
+        <button onclick="showCondition(conditions[1])">Sinus Rhythm with Baseline Wander</button>
+        <button onclick="showCondition(conditions[2])">Sinus Arrhythmia-HVR</button>
+        <button onclick="showCondition(conditions[3])">Sinus Tachycardia</button>
+        <button onclick="showCondition(conditions[4])">Sinus exit block</button>
+    </div>
+    <div class="button-row">
+        <button onclick="showCondition(conditions[5])">Sinus Arrest</button>
+        <button onclick="showCondition(conditions[6])">Premature Atrial Contractions (PACS)</button>
+        <button onclick="showCondition(conditions[7])">Ventricular Trigeminy</button>
+        <button onclick="showCondition(conditions[8])">Ventricular Fibrillation</button>
+        <button onclick="showCondition(conditions[9])">Supraventricular Tachycardia </button>
+    </div>
+    <div class="button-row">
+        <button onclick="showCondition(conditions[10])">Ventricular Bigeminy </button>
+        <button onclick="showCondition(conditions[11])">Idioventricular Rhythm</button>
+        <button onclick="showCondition(conditions[12])">Accelerated Idioventricular Rhythm</button>
+        <button onclick="showCondition(conditions[13])">1st Degree AV Block</button>
+        <button onclick="showCondition(conditions[14])">2nd Degree Type I AV Block</button>
+    </div>
+    <div class="button-row">
+        <button onclick="showCondition(conditions[15])">2nd Degree Type II AV Block </button>
+        <button onclick="showCondition(conditions[16])">2nd Degree 2:1 AV Block </button>
+        <button onclick="showCondition(conditions[17])">3rd Degree AV Block </button>
+        <button onclick="showCondition(conditions[18])">Accelerated Nodal Rhythm</button>
+        <button onclick="showCondition(conditions[19])">Premature Nodal (Junctional) Contractions</button>
+    </div>
+    <div class="button-row">
+        <button onclick="showCondition(conditions[20])">Nodal Escape Rhythm </button>
+        <button onclick="showCondition(conditions[21])">Nodal Bigeminy</button>
+        <button onclick="showCondition(conditions[22])">Nodal Tachycardia</button>
+        <button onclick="showCondition(conditions[23])">Atrial Trigeminy</button>
+        <button onclick="showCondition(conditions[24])">Atrial Fibrillation</button>
+    </div>
+    <div class="button-row">
+        <button onclick="showCondition(conditions[25])">Atrial Flutter 3:1</button>
+        <button onclick="showCondition(conditions[26])">ST Segment Depression</button>
+        <button onclick="showCondition(conditions[27])">ST Segment Elevation</button>
+        <button onclick="showCondition(conditions[28])">Left Bundle Branch Block</button>
+        <button onclick="showCondition(conditions[29])">Right Bundle Branch Block</button>
+    </div>
+    <!-- Agrega más filas y botones para las otras condiciones de manera similar -->
+
+    <div id="condition-content"></div>
+
+   
+
+        
+                
+    </div>
+
+
+
+       
+
+
+
+
+
+
+</div>
+
+<script>
+    function mostrarCaracteristicas(enfermedadId) {
+        // Oculta todas las secciones de características
+        var caracteristicas = document.querySelectorAll('.caracteristicas');
+        caracteristicas.forEach(function (element) {
+            element.style.display = 'none';
+        });
+
+        // Muestra la sección de características específica
+        var enfermedad = document.getElementById(enfermedadId);
+        enfermedad.style.display = 'block';
+    }
+</script>
+
+
+</html>
